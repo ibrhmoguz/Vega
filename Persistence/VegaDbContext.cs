@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Vega.Models;
 
@@ -11,5 +10,6 @@ namespace Vega.Persistence
         }
 
         public DbSet<Make> Makes { get; set; }
+        public DbSet<Model> Models { get; set; }
     }
 }
