@@ -16,27 +16,29 @@ namespace Vega.Persistence
             }
 
             var modelList1 = new List<Model>{
-                new Model{Id=1, Name="Model1"},
-                new Model{Id=1, Name="Model2"},
-                new Model{Id=1, Name="Model3"},
-                new Model{Id=1, Name="Model4"},
+                new Model{Name="Model1"},
+                new Model{Name="Model2"},
+                new Model{Name="Model3"},
+                new Model{Name="Model4"},
             };
 
 
             var modelList2 = new List<Model>{
-                new Model{Id=1, Name="Model5"},
-                new Model{Id=1, Name="Model6"},
-                new Model{Id=1, Name="Model7"}
-            };
-
-            var makeList = new List<Make>{
-                new Make{Id=1,Name="Make1", Models= modelList1},
-                new Make{Id=2,Name="Make2", Models= modelList2}
+                new Model{Name="Model5"},
+                new Model{Name="Model6"},
+                new Model{Name="Model7"}
             };
 
             modelList1.ForEach(m => dbContext.Models.Add(m));
             modelList2.ForEach(m => dbContext.Models.Add(m));
+
+            var makeList = new List<Make>{
+                new Make{Name="Make1", Models= modelList1},
+                new Make{Name="Make2", Models= modelList2}
+            };
+
             makeList.ForEach(m => dbContext.Makes.Add(m));
+            dbContext.SaveChanges();
         }
     }
 }
