@@ -10,21 +10,22 @@ export class VehicleFormComponent implements OnInit {
   makes: any[] = [];
   models: any[] = [];
   vehicle: any = {};
+
   constructor(private makeService: MakeService) { }
 
   ngOnInit() {
+    this.vehicle.makeId = 0;
     this.makeService.getMakes().subscribe(makes => {
       this.makes = makes;
-      console.log("MAKES:", this.makes)
-    });
+      console.log(this.makes);
+    })
   }
 
-  onSelectedMake() {
-    var selectedMake = this.makes.find(m => m.id == this.vehicle.make);
+  onSelectedMakeChanged() {
+    var selectedMake = this.makes.find(m => m.id == this.vehicle.makeId);
     if (selectedMake == undefined) {
       this.models = [];
     }
     this.models = selectedMake.models;
-
   }
 }
