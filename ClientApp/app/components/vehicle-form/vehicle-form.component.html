@@ -2,7 +2,7 @@
 <form action="">
   <div class="form-group">
     <label for="make">Make</label>
-    <select id="make" class="form-control" (change)="onSelectedMakeChanged()" [(ngModel)]="vehicle.makeId" name="makeId">
+    <select name="make" id="make" (change)="onSelectedMakeChanged()" [(ngModel)]="vehicle.makeId" class="form-control">
       <option value="0">Select...</option>
       <option *ngFor="let m of makes" value="{{m.id}}">{{m.name}}</option>
     </select>
@@ -13,5 +13,18 @@
       <option value="0">Select...</option>
       <option *ngFor="let m of models" value="{{m.id}}">{{m.name}}</option>
     </select>
+  </div>
+  <p>Is this vehicle registered?</p>
+  <label for="registered" class="radio-inline">
+    <input id="registered" type="radio" value="1" name="isRegistered">Yes
+  </label>
+  <label for="notRegistered" class="radio-inline">
+    <input id="notRegistered" type="radio" value="false" name="isRegistered">No
+  </label>
+  <h2>Features</h2>
+  <div *ngFor="let f of features" class="checkbox">
+    <label for="feature{{f.id}}">
+      <input type="checkbox" id="feature{{f.id}}">{{f.name}}
+    </label>
   </div>
 </form>

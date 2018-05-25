@@ -21,16 +21,18 @@ namespace vega
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                try
-                {
-                    var context = services.GetRequiredService<VegaDbContext>();
-                    VegaDbInitializer.Initialize(context);
-                }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "Error occured while seeding the database.");
-                }
+                var context = services.GetRequiredService<VegaDbContext>();
+                VegaDbInitializer.Initialize(context);
+
+                // try
+                // {
+
+                // }
+                // catch (Exception ex)
+                // {
+                //     var logger = services.GetRequiredService<ILogger<Program>>();
+                //     logger.LogError(ex, "Error occured while seeding the database.");
+                // }
             }
 
             host.Run();

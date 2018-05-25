@@ -38,6 +38,14 @@ namespace Vega.Persistence
             };
 
             makeList.ForEach(m => dbContext.Makes.Add(m));
+
+            var featureList = new List<Feature>{
+                new Feature{Name="Feature 1"},
+                new Feature{Name="Feature 2"},
+                new Feature{Name="Feature 3"},
+            };
+            featureList.ForEach(f => dbContext.Features.Add(f));
+
             dbContext.SaveChanges();
         }
     }
