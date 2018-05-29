@@ -36,9 +36,21 @@ namespace Vega.Controllers
             return this.mapper.Map<List<Feature>, List<FeatureResource>>(features);
         }
 
-        [HttpPost("AddVehicle")]
+        [HttpPost]
         public async Task<IActionResult> CreateVehicle([FromBody] VehicleResource vehicleResource)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var modelEntity = await this.context.Models.FirstOrDefaultAsync(x => x.Id == vehicleResource.ModelId);
+            if (modelEntity == null)
+            {
+                ModelState.AddModelError("FK_NotFound", "Model not found for given model id");
+                return BadRequest(ModelState);
+            }
+
             var vehicle = this.mapper.Map<VehicleResource, Vehicle>(vehicleResource);
 
             vehicle.LastUpdate = DateTime.Now;
@@ -47,6 +59,43 @@ namespace Vega.Controllers
 
             var result = this.mapper.Map<Vehicle, VehicleResource>(vehicle);
             return Ok(result);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateVehicle(int id, [FromBody] VehicleResource vehicleResource)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var vehicle = await this.context.Vehicles.Include(x => x.Features).SingleOrDefaultAsync(x => x.Id == id);
+            this.mapper.Map<VehicleResource, Vehicle>(vehicleResource, vehicle);
+
+            vehicle.LastUpdate = DateTime.Now;
+            await this.context.SaveChangesAsync();
+
+            var result = this.mapper.Map<Vehicle, VehicleResource>(vehicle);
+            return Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteVehicle(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var vehicle = await this.context.Vehicles.SingleOrDefaultAsync(x => x.Id == id);
+            if (vehicle == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            this.context.Vehicles.Remove(vehicle);
+            await this.context.SaveChangesAsync();
+            return Ok(id);
         }
     }
 }
