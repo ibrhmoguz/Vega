@@ -90,12 +90,26 @@ namespace Vega.Controllers
             var vehicle = await this.context.Vehicles.SingleOrDefaultAsync(x => x.Id == id);
             if (vehicle == null)
             {
-                return BadRequest(ModelState);
+                return NotFound();
             }
 
             this.context.Vehicles.Remove(vehicle);
             await this.context.SaveChangesAsync();
             return Ok(id);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetVehicle(int id)
+        {
+            var vehicle = await this.context.Vehicles.Include(vega => vega.Features).SingleOrDefaultAsync(v => v.Id == id);
+            if (vehicle == null)
+            {
+                ModelState.AddModelError("Novehicle", "Vehicle not found!");
+                return NotFound();
+            }
+            var vehicleResource = this.mapper.Map<Vehicle, VehicleResource>(vehicle);
+
+            return Ok(vehicleResource);
         }
     }
 }
